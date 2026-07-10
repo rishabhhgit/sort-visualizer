@@ -40,7 +40,6 @@ npm run dev
 ## Project Structure
 
 ```
-web/
 ├── index.html              # App shell
 ├── package.json            # Dependencies
 ├── vite.config.js          # Vite + React + Tailwind config
