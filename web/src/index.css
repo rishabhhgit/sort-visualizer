@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark-900: #06060f;
+  --color-dark-800: #0e0e20;
+  --color-dark-700: #161630;
+  --color-dark-600: #1e1e42;
+  --color-dark-500: #2a2a56;
+  --color-accent-purple: #7c3aed;
+  --color-accent-blue: #3b82f6;
+  --color-accent-cyan: #06b6d4;
+  --color-accent-green: #10b981;
+  --color-accent-yellow: #f59e0b;
+  --color-accent-red: #ef4444;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a56 transparent;
+}
+
+body {
+  background: var(--color-dark-900);
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+/* ── Ambient background glow ── */
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.bg-glow::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
+  animation: glowDrift 8s ease-in-out infinite alternate;
+}
+
+.bg-glow::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  bottom: -150px;
+  right: -100px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 70%);
+  animation: glowDrift 10s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes glowDrift {
+  0% { transform: translateX(-50%) translateY(0); }
+  100% { transform: translateX(-50%) translateY(40px); }
+}
+
+/* ── Bar state animations (driven by data-state) ── */
+@keyframes barGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.6); }
+}
+
+@keyframes barSwap {
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(0.5); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes sweepSorted {
+  0% { filter: brightness(1) saturate(1); }
+  50% { filter: brightness(2) saturate(1.5); }
+  100% { filter: brightness(1) saturate(1); }
+}
+
+[data-state="comparing"] {
+  animation: barGlow 0.25s ease-in-out;
+  z-index: 2;
+}
+
+[data-state="swapping"] {
+  animation: barSwap 0.2s ease-in-out;
+}
+
+[data-state="sorted"] {
+  animation: sweepSorted 0.4s ease-out;
+}
+
+[data-state="pivot"] {
+  filter: brightness(1.4);
+}
+
+/* ── Button hover shine ── */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.08) 45%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.08) 55%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── Custom range slider ── */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 110px;
+  height: 6px;
+  border-radius: 3px;
+  background: #1e1e42;
+  outline: none;
+  transition: background 0.2s;
+}
+
+input[type="range"]:hover {
+  background: #2a2a56;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #3b82f6);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(124, 58, 237, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 14px rgba(124, 58, 237, 0.6);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #3b82f6);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(124, 58, 237, 0.4);
+}
+
+/* ── Glass card ── */
+.glass {
+  background: rgba(14, 14, 32, 0.6);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ── Pulse ring on sort button ── */
+@keyframes pulseRing {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.pulse-ring {
+  animation: pulseRing 2s infinite;
+}
